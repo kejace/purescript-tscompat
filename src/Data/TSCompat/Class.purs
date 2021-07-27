@@ -11,7 +11,7 @@ import Type.Data.Boolean
 
 foreign import data OptionField :: Boolean -> Type -> Type
 
-class TsTypeExists (t :: Type) (rl :: RL.RowList Type) (o :: Boolean) | t rl -> o
+class TsTypeExists t (rl :: RL.RowList Type) (o :: Boolean) | t rl -> o
 instance consCheck :: (IsEq t t2 eq, TsTypeExists t tail tailEq, Or eq tailEq out) 
     => TsTypeExists t (RL.Cons "typed" t2 tail) out
 instance nilCheck :: TsTypeExists t RL.Nil False
@@ -21,7 +21,7 @@ instance consAll :: (ConstainsAll tail b, Row.Cons s any btail b) => ConstainsAl
 instance nilAll :: ConstainsAll RL.Nil b 
 
 {-- By using this class we can get pretty good error messages --}
-class TSCompatible (s :: Symbol) (a :: Type) (b :: Type) (eq :: Boolean) | a -> b, b -> a
+class TSCompatible (s :: Symbol) a b (eq :: Boolean) | a -> b, b -> a
 instance onlyTrue :: TSCompatible s a b True
 instance sameType :: TSCompatible s a a False
 
@@ -35,7 +35,7 @@ instance consOptEQ :: (Row.Cons s tb tailb b, IsOptional s m o, IsEq ta (OptionF
     TSCompatible s ta tb eq, IsEqRowList taila b m) => IsEqRowList (RL.Cons s ta taila) b m
 instance nilRLEQ :: IsEqRowList RL.Nil b m
 
-class IsEq (a :: Type) (b :: Type) (eq :: Boolean) | a b -> eq
+class IsEq a b (eq :: Boolean) | a b -> eq
 instance reflTSEq :: IsEq a a True
 else instance anyIsEq :: IsEq a Any True
 else instance unionIsEq :: (RL.RowToList b rl, TsTypeExists a rl eq) 
@@ -52,7 +52,7 @@ else instance optionalNull :: IsEq a b eq => IsEq (Nullable a) (OptionField True
 else instance optional :: IsEq a b eq => IsEq a (OptionField o b) eq
 else instance notEq :: IsEq a b False
  
-class IsTSEq (a :: Type) (b :: Type)
+class IsTSEq a b
 instance anyTSEq :: IsEq a b True => IsTSEq a b
 
 asTS :: forall a b. IsTSEq a b => a -> b 

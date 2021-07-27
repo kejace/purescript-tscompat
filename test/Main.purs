@@ -1,6 +1,6 @@
 module Test.Main where 
 
-import Prelude
+import Prelude hiding (compare)
 
 import Data.Array as Array
 import Data.List as L
