@@ -18,10 +18,10 @@ import Type.Data.Row (RProxy(..))
 import Type.Data.RowList (RLProxy(..))
 import Type.Proxy (Proxy(..))
 
-class TypeAsString a where 
+class TypeAsString (a :: Type) where 
   asString :: Proxy a -> String 
 
-class RowListAsStrings (a :: RL.RowList) where 
+class RowListAsStrings (a :: RL.RowList Type) where 
   asStrings :: RLProxy a -> L.List {l::String, t::String}
 
 unionString :: forall rt rl. RL.RowToList rt rl => RowListAsStrings rl => RProxy rt -> String 
@@ -95,7 +95,7 @@ compareEQ = compare bTrue " = "
 compareNEQ :: forall a b. IsEq a b False => TypeAsString a => TypeAsString b => Proxy a -> Proxy b -> Effect Unit
 compareNEQ = compare bFalse " /= "
 compareOptEQ :: forall a b. IsEq a (OptionField True b) True => TypeAsString a => TypeAsString b => Proxy a -> Proxy b -> Effect Unit
-compareOptEQ pa pb = compare bTrue " o= " pa (Proxy :: Proxy (OptionField True b))
+compareOptEQ pa _ = compare bTrue " o= " pa (Proxy :: Proxy (OptionField True b))
 
 main :: Effect Unit 
 main = do 

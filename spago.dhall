@@ -4,11 +4,16 @@ You can edit this file as you like.
 -}
 { name = "tscompat"
 , dependencies =
-  [ "react"
+  [ "arrays"
+  , "console"
+  , "effect"
   , "lists"
+  , "nullable"
+  , "prelude"
+  , "react"
   , "strings"
   , "typelevel-prelude"
-  , "console"
+  , "unsafe-coerce"
   ]
 , packages = ./packages.dhall
 , sources = [ "src/**/*.purs", "test/**/*.purs" ]
